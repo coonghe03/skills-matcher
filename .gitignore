@@ -1,0 +1,19 @@
+# Node
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-lock.yaml
+
+# Env
+.env
+.env.local
+backend/.env
+
+# OS/Editor
+.DS_Store
+Thumbs.db
+.vscode
+
+# Build
+frontend/build
