@@ -9,6 +9,9 @@ import ProjectRequiredSkills from './pages/ProjectRequiredSkills';
 import AssignSkills from './pages/AssignSkills';
 import ProjectMatching from './pages/ProjectMatching';
 import ProjectAllocations from './pages/ProjectAllocations';
+import AdvancedSearch from './pages/AdvancedSearch';
+import PersonnelGrowth from './pages/PersonnelGrowth';
+import UtilizationView from './pages/UtilizationView';
 
 function Home() {
   const [health, setHealth] = useState(null);
@@ -35,6 +38,9 @@ export default function App() {
   <NavLink to="/personnel">Personnel</NavLink>
   <NavLink to="/skills">Skills</NavLink>
   <NavLink to="/projects">Projects</NavLink>
+  <NavLink to="/search">Search</NavLink>      
+  <NavLink to="/growth">Growth</NavLink>         
+  <NavLink to="/utilization">Utilization</NavLink>
 </nav>
 <Routes>
   <Route path="/" element={<Home />} />
@@ -47,6 +53,9 @@ export default function App() {
   <Route path="/projects/:id/required-skills" element={<ProjectRequiredSkills />} />
   <Route path="/projects/:id/matching" element={<ProjectMatching />} />
   <Route path="/projects/:id/allocations" element={<ProjectAllocations />} />
+  <Route path="/search" element={<AdvancedSearch />} />
+  <Route path="/growth" element={<PersonnelGrowth />} />
+  <Route path="/utilization" element={<UtilizationView />} />
 </Routes>
     </BrowserRouter>
   );

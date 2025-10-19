@@ -16,3 +16,15 @@ Availability (simplified):
 - `POST /api/allocations` { project_id, personnel_id, start_date, end_date?, percent_alloc (1–100) }
   - Prevents overallocation (>100%) on overlapping dates.
 - `DELETE /api/allocations/:id`
+
+## Deployment
+
+### Docker (local, all services)
+Requires Docker Engine + Compose.
+
+```bash
+docker compose build
+docker compose up -d
+# Backend: http://localhost:5000
+# Matching service: http://localhost:5100
+# MySQL: localhost:3306 (user: root / pass: rootpass)

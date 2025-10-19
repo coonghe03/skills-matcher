@@ -9,6 +9,8 @@ const skillsRoutes = require('./routes/skills');
 const projectsRoutes = require('./routes/projects');
 const allocationRoutes = require('./routes/allocations');   
 const matchProxyRoutes = require('./routes/matchProxy');
+const analyticsRoutes = require('./routes/analytics');
+const corsOrigin = process.env.CORS_ORIGIN || '*';
 
 const app = express();
 app.use(cors());
@@ -37,6 +39,8 @@ app.use('/api/skills', skillsRoutes);
 app.use('/api/projects', projectsRoutes);
 app.use('/api', allocationRoutes);
 app.use('/api', matchProxyRoutes);
+app.use('/api', analyticsRoutes);
+app.use(cors({ origin: corsOrigin === '*' ? true : corsOrigin }));
 
 // 404 & error handlers
 app.use((req, res) => res.status(404).json({ error: 'Not Found' }));

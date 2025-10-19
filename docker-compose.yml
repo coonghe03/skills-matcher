@@ -1,0 +1,70 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: skills-db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: skills_matcher
+    command: [
+      "--default-authentication-plugin=mysql_native_password",
+      "--character-set-server=utf8mb4",
+      "--collation-server=utf8mb4_unicode_ci"
+    ]
+    ports:
+      - "3306:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-prootpass"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: skills-backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: rootpass
+      DB_NAME: skills_matcher
+      # Expose matching service url inside compose network
+      MATCHING_SERVICE_URL: http://matching-service:5100
+      # CORS (adjust if you host frontend elsewhere): "*" allows all
+      CORS_ORIGIN: "*"
+      # Seed sample data on first run? (true/false)
+      SEED: "true"
+    ports:
+      - "5000:5000"
+
+  matching-service:
+    build:
+      context: ./matching-service
+      dockerfile: Dockerfile
+    container_name: skills-matching
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 5100
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: rootpass
+      DB_NAME: skills_matcher
+    ports:
+      - "5100:5100"
+
+volumes:
+  dbdata:

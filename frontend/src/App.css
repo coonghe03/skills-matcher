@@ -15,4 +15,6 @@ a.active { font-weight: 600; }
 }
 .form-grid label { display: flex; flex-direction: column; gap: 6px; }
 .form-grid label.full { grid-column: 1 / -1; }
+.chart-wrap { max-width: 1000px; }
+
 
