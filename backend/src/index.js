@@ -4,7 +4,9 @@ const cors = require('cors');
 const { pool } = require('./db');
 
 const personnelRoutes = require('./routes/personnel');
+const personnelSkillsRoutes = require('./routes/personnelSkills'); // NEW
 const skillsRoutes = require('./routes/skills');
+const projectsRoutes = require('./routes/projects');
 
 const app = express();
 app.use(cors());
@@ -27,6 +29,10 @@ app.get('/api/health/db', async (req, res) => {
 // Mount CRUD
 app.use('/api/personnel', personnelRoutes);
 app.use('/api/skills', skillsRoutes);
+app.use('/api/personnel', personnelRoutes);
+app.use('/api/personnel/:personnelId/skills', personnelSkillsRoutes); // mount nested
+app.use('/api/skills', skillsRoutes);
+app.use('/api/projects', projectsRoutes);
 
 // 404 & error handlers
 app.use((req, res) => res.status(404).json({ error: 'Not Found' }));

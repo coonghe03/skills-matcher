@@ -42,6 +42,7 @@ export default function PersonnelList() {
               <td>{p.role_title}</td>
               <td>{p.experience_level}</td>
               <td>{new Date(p.created_at).toLocaleString()}</td>
+              <td><a href={`/personnel/${p.id}/assign-skills`}>{p.name}</a></td>
             </tr>
           ))}
         </tbody>

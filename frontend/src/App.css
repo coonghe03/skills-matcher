@@ -6,3 +6,13 @@ a.active { font-weight: 600; }
 .table { width: 100%; border-collapse: collapse; }
 .table th, .table td { border: 1px solid #ddd; padding: 8px; }
 .table th { background: #fafafa; text-align: left; }
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 12px 0 16px;
+}
+.form-grid label { display: flex; flex-direction: column; gap: 6px; }
+.form-grid label.full { grid-column: 1 / -1; }
+
