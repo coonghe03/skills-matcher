@@ -3,6 +3,9 @@ const express = require('express');
 const cors = require('cors');
 const { pool } = require('./db');
 
+const personnelRoutes = require('./routes/personnel');
+const skillsRoutes = require('./routes/skills');
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -21,6 +24,11 @@ app.get('/api/health/db', async (req, res) => {
   }
 });
 
+// Mount CRUD
+app.use('/api/personnel', personnelRoutes);
+app.use('/api/skills', skillsRoutes);
+
+// 404 & error handlers
 app.use((req, res) => res.status(404).json({ error: 'Not Found' }));
 app.use((err, req, res, next) => {
   console.error('Server Error:', err);
