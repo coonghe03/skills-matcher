@@ -4,9 +4,11 @@ const cors = require('cors');
 const { pool } = require('./db');
 
 const personnelRoutes = require('./routes/personnel');
-const personnelSkillsRoutes = require('./routes/personnelSkills'); // NEW
+const personnelSkillsRoutes = require('./routes/personnelSkills');
 const skillsRoutes = require('./routes/skills');
 const projectsRoutes = require('./routes/projects');
+const allocationRoutes = require('./routes/allocations');   
+const matchProxyRoutes = require('./routes/matchProxy');
 
 const app = express();
 app.use(cors());
@@ -30,9 +32,11 @@ app.get('/api/health/db', async (req, res) => {
 app.use('/api/personnel', personnelRoutes);
 app.use('/api/skills', skillsRoutes);
 app.use('/api/personnel', personnelRoutes);
-app.use('/api/personnel/:personnelId/skills', personnelSkillsRoutes); // mount nested
+app.use('/api/personnel/:personnelId/skills', personnelSkillsRoutes); 
 app.use('/api/skills', skillsRoutes);
 app.use('/api/projects', projectsRoutes);
+app.use('/api', allocationRoutes);
+app.use('/api', matchProxyRoutes);
 
 // 404 & error handlers
 app.use((req, res) => res.status(404).json({ error: 'Not Found' }));

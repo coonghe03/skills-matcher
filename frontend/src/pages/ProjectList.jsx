@@ -44,6 +44,8 @@ export default function ProjectList() {
               <td>{p.team_capacity}</td>
               <td>{p.start_date || '-'} → {p.end_date || '-'}</td>
               <td><a href={`/projects/${p.id}/required-skills`}>Required Skills</a></td>
+              <a href={`/projects/${p.id}/required-skills`}>Required Skills</a> |{' '}
+              <a href={`/projects/${p.id}/matching`}>Matching</a>
             </tr>
           ))}
         </tbody>

@@ -15,3 +15,5 @@
 
 > Validation: express-validator ensures basic constraints.  
 > Uniqueness: skills are unique per (category, name).
+
+

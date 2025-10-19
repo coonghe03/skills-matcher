@@ -1,16 +1,18 @@
-# Skills Matcher (Personnel–Project Skill Matching)
+### Matching (microservice)
+- Separate Node service in `/matching-service` (connects to same MySQL).
+- `GET http://localhost:5100/match/:projectId?sort=fit|availability`
+- Main API proxy: `GET /api/match/:projectId?sort=...` (set `MATCHING_SERVICE_URL`)
 
-Monorepo with `frontend` (React) and `backend` (Node/Express + MySQL).
+Fit score:
+- Candidate must meet all required skills with `proficiency >= min`.
+- `fit_score = avg( candidateProf / minProf )`, capped at 2.0, with tie bonus (Senior +0.1, Mid +0.05).
 
-## Quick start
+Availability (simplified):
+- Sum overlapping `percent_alloc` across allocations in the project window.
+- `availability = 100 - utilization`. Filter/Sort by `?sort=`.
 
-### Backend
-1. `cd backend`
-2. Copy `.env.example` to `.env` and set your MySQL credentials.
-3. `npm run dev` (runs on http://localhost:5000)
-
-### Frontend
-1. `cd frontend`
-2. `npm start` (runs on http://localhost:3000)
-
-Health check: visit `http://localhost:5000/api/health`
+### Allocations
+- `GET /api/projects/:projectId/allocations`
+- `POST /api/allocations` { project_id, personnel_id, start_date, end_date?, percent_alloc (1–100) }
+  - Prevents overallocation (>100%) on overlapping dates.
+- `DELETE /api/allocations/:id`

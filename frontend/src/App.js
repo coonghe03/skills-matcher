@@ -7,6 +7,8 @@ import ProjectList from './pages/ProjectList';
 import ProjectForm from './pages/ProjectForm';
 import ProjectRequiredSkills from './pages/ProjectRequiredSkills';
 import AssignSkills from './pages/AssignSkills';
+import ProjectMatching from './pages/ProjectMatching';
+import ProjectAllocations from './pages/ProjectAllocations';
 
 function Home() {
   const [health, setHealth] = useState(null);
@@ -43,6 +45,8 @@ export default function App() {
   <Route path="/projects/:id/edit" element={<ProjectForm />} />
   <Route path="/projects/new" element={<ProjectForm />} />
   <Route path="/projects/:id/required-skills" element={<ProjectRequiredSkills />} />
+  <Route path="/projects/:id/matching" element={<ProjectMatching />} />
+  <Route path="/projects/:id/allocations" element={<ProjectAllocations />} />
 </Routes>
     </BrowserRouter>
   );
