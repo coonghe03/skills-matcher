@@ -28,3 +28,13 @@ docker compose up -d
 # Backend: http://localhost:5000
 # Matching service: http://localhost:5100
 # MySQL: localhost:3306 (user: root / pass: rootpass)
+
+## Production Hardening
+
+- Backend: `helmet`, `compression`, `morgan` (dev), `express-rate-limit` (100 req / 15 min / IP).
+- Matching service: same security stack (no rate-limit by default).
+- Backend `ENTRYPOINT` auto-applies schema and can seed via `SEED=true`.
+
+## Docker Options
+
+### Dev stack (without frontend container)

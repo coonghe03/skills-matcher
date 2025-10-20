@@ -1,0 +1,178 @@
+openapi: 3.0.3
+info:
+  title: Skills Matcher API
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000
+paths:
+  /api/health:
+    get:
+      summary: Health
+      responses:
+        '200': { description: OK }
+  /api/health/db:
+    get:
+      summary: DB Health
+      responses:
+        '200': { description: OK }
+  /api/personnel:
+    get:
+      summary: List personnel
+      parameters:
+        - in: query; name: page; schema: { type: integer }
+        - in: query; name: limit; schema: { type: integer }
+        - in: query; name: q; schema: { type: string }
+        - in: query; name: level; schema: { type: string, enum: [Junior, Mid, Senior] }
+      responses: { '200': { description: OK } }
+    post:
+      summary: Create personnel
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, role_title, experience_level]
+              properties:
+                name: { type: string }
+                role_title: { type: string }
+                experience_level: { type: string, enum: [Junior, Mid, Senior] }
+      responses: { '201': { description: Created } }
+  /api/personnel/{id}:
+    get:
+      summary: Get personnel
+      parameters: [ { in: path, name: id, required: true, schema: { type: integer } } ]
+      responses: { '200': { description: OK }, '404': { description: Not found } }
+    put:
+      summary: Update personnel
+      parameters: [ { in: path, name: id, required: true, schema: { type: integer } } ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Personnel'
+      responses: { '200': { description: OK }, '404': { description: Not found } }
+    delete:
+      summary: Delete personnel
+      parameters: [ { in: path, name: id, required: true, schema: { type: integer } } ]
+      responses: { '204': { description: No content } }
+  /api/skills:
+    get:
+      summary: List skills
+      parameters:
+        - in: query; name: page; schema: { type: integer }
+        - in: query; name: limit; schema: { type: integer }
+        - in: query; name: q; schema: { type: string }
+        - in: query; name: category; schema: { type: string }
+      responses: { '200': { description: OK } }
+    post:
+      summary: Create skill
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [category, name]
+              properties:
+                category: { type: string }
+                name: { type: string }
+      responses: { '201': { description: Created } }
+  /api/projects:
+    get:
+      summary: List projects
+      responses: { '200': { description: OK } }
+    post:
+      summary: Create project
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Project'
+      responses: { '201': { description: Created } }
+  /api/projects/{id}:
+    get:
+      summary: Get project (with required skills)
+      parameters: [ { in: path, name: id, required: true, schema: { type: integer } } ]
+      responses: { '200': { description: OK }, '404': { description: Not found } }
+    put:
+      summary: Update project
+      parameters: [ { in: path, name: id, required: true, schema: { type: integer } } ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Project'
+      responses: { '200': { description: OK } }
+    delete:
+      summary: Delete project
+      parameters: [ { in: path, name: id, required: true, schema: { type: integer } } ]
+      responses: { '204': { description: No content } }
+  /api/projects/{id}/required-skills:
+    get:
+      summary: List required skills
+      parameters: [ { in: path, name: id, required: true, schema: { type: integer } } ]
+      responses: { '200': { description: OK } }
+    post:
+      summary: Upsert required skill
+      parameters: [ { in: path, name: id, required: true, schema: { type: integer } } ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [skill_id, min_proficiency]
+              properties:
+                skill_id: { type: integer }
+                min_proficiency: { type: integer, minimum: 1, maximum: 5 }
+      responses: { '201': { description: Created } }
+  /api/match/{projectId}:
+    get:
+      summary: Get matches
+      parameters:
+        - in: path; name: projectId; required: true; schema: { type: integer }
+        - in: query; name: sort; schema: { type: string, enum: [fit, availability] }
+      responses: { '200': { description: OK } }
+  /api/allocations:
+    post:
+      summary: Create allocation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [project_id, personnel_id, start_date, percent_alloc]
+              properties:
+                project_id: { type: integer }
+                personnel_id: { type: integer }
+                start_date: { type: string, format: date }
+                end_date: { type: string, format: date, nullable: true }
+                percent_alloc: { type: integer, minimum: 1, maximum: 100 }
+      responses: { '201': { description: Created } }
+  /api/projects/{id}/allocations:
+    get:
+      summary: List allocations for project
+      parameters: [ { in: path, name: id, required: true, schema: { type: integer } } ]
+      responses: { '200': { description: OK } }
+components:
+  schemas:
+    Personnel:
+      type: object
+      properties:
+        name: { type: string }
+        role_title: { type: string }
+        experience_level: { type: string, enum: [Junior, Mid, Senior] }
+    Project:
+      type: object
+      properties:
+        name: { type: string }
+        description: { type: string, nullable: true }
+        start_date: { type: string, format: date, nullable: true }
+        end_date: { type: string, format: date, nullable: true }
+        status: { type: string, enum: [Planning, Active, Completed] }
+        team_capacity: { type: integer, minimum: 1 }
